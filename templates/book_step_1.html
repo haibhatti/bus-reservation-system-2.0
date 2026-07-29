@@ -6,7 +6,6 @@
 <form method="post" id="bookingForm">
     {% csrf_token %}
     <div class="row">
-        
         <div class="col-md-6">
             <div class="mb-3">
                 <label class="form-label">Full Name</label>
@@ -22,7 +21,6 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Phone Number</label>
-                
                 <input type="text" name="passenger_phone" class="form-control" pattern="^03\d{9}$" title="Enter an 11-digit Pakistani mobile number starting with 03 (e.g., 03001234567)" placeholder="03001234567" required>
             </div>
             <div class="mb-3">
@@ -80,7 +78,6 @@
 </form>
 
 <script>
-
     document.querySelectorAll('.seat-available').forEach(function(el) {
         el.addEventListener('click', function() {
             document.querySelectorAll('.seat').forEach(function(s) { s.classList.remove('seat-selected'); });

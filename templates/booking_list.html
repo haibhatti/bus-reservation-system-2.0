@@ -2,7 +2,6 @@
 {% block content %}
 <h2>All Bookings</h2>
 
-<!-- Filter Tabs -->
 <div class="btn-group mb-3">
     <a href="?status=all&q={{ query }}" class="btn btn-outline-primary {% if status_filter == 'all' %}active{% endif %}">All</a>
     <a href="?status=active&q={{ query }}" class="btn btn-outline-primary {% if status_filter == 'active' %}active{% endif %}">Active</a>
@@ -11,7 +10,6 @@
     <a href="?status=refund_requested&q={{ query }}" class="btn btn-outline-dark {% if status_filter == 'refund_requested' %}active{% endif %}">Refund Requests</a>
 </div>
 
-<!-- Search Form -->
 <form method="get" class="row g-3 mb-3">
     <div class="col-md-4">
         <input type="text" name="q" class="form-control" placeholder="Search by PNR, CNIC, Name, Phone..." value="{{ query }}">
@@ -67,12 +65,10 @@
                         {% endif %}
                     {% endif %}
                     
-                    
                     {% if t.payment_status == 'REFUND_REQUESTED' %}
                         <button type="submit" name="action" value="process_refund" class="btn btn-sm btn-dark mb-1">Approve Refund</button>
                     {% endif %}
                 </form>
-                
                 
                 {% if 'CANCELLED' not in t.ticket_status %}
                     <div class="btn-group btn-group-sm mt-1" role="group">

@@ -1,15 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Verify OTP</h2>
-
 <p>We sent a 6-digit verification code to <strong>{{ email }}</strong></p>
-
 
 <form method="post">
     {% csrf_token %}
     <div class="mb-3">
         <label>OTP Code</label>
-        
         <input type="text" name="otp_code" class="form-control" placeholder="000000" maxlength="6" required autofocus>
     </div>
     <button type="submit" class="btn btn-primary">Verify & Confirm Booking</button>

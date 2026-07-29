@@ -11,9 +11,7 @@
         <tr>
             <td>{{ trip.route_name }}</td>
             <td>{{ trip.date }}</td>
-            
             <td>{{ trip.departure_time|time:"h:i A" }}</td>
-        
             <td>{{ trip.bus.bus_name }}</td>
             <td>
                 <a href="{% url 'book_ticket_step_1' trip.id %}" class="btn btn-sm btn-primary">Book Seat</a>
