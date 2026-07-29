@@ -1,70 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Dashboard</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-
-    <!-- NAVIGATION BAR -->
-    <nav class="navbar navbar-dark bg-dark mb-5">
-        <div class="container">
-            <span class="navbar-brand mb-0 h1">Bus Terminal - Employee Portal</span>
-            <div class="d-flex align-items-center">
-                <span class="navbar-text me-3 text-white">Logged in as: <strong>{{ request.user.username }}</strong></span>
-                <!-- Secure Logout Button -->
-                <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">Logout</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- DASHBOARD OPTIONS (4 Cards) -->
-    <div class="container">
-        <div class="row justify-content-center gap-3">
-            
-            <!-- Option 1: Book Ticket -->
-            <div class="col-md-2 col-sm-6">
-                <div class="card shadow border-0 p-3 text-center h-100">
-                    <h5 class="fw-bold">Book Ticket</h5>
-                    <p class="text-muted small">Create new reservation</p>
-                   <a href="{% url 'search_route' %}" class="btn btn-success w-100 mt-auto">Book</a>
-                </div>
-            </div>
-
-            <!-- Option 2: View Bookings -->
-            <div class="col-md-2 col-sm-6">
-                <div class="card shadow border-0 p-3 text-center h-100">
-                    <h5 class="fw-bold">View Bookings</h5>
-                    <p class="text-muted small">See all passengers</p>
-                    <a href="{% url 'view_bookings' %}" class="btn btn-info w-100 mt-auto text-white">View All</a>
-                </div>
-            </div>
-
-       <!-- Option 3: Edit Ticket -->
-            <div class="col-md-2 col-sm-6">
-                <div class="card shadow border-0 p-3 text-center h-100">
-                    <h5 class="fw-bold">Edit Ticket</h5>
-                    <p class="text-muted small">Modify passenger details</p>
-                    <!-- THE FIX: Route them to the list so they can pick a passenger -->
-                    <a href="{% url 'view_bookings' %}" class="btn btn-warning w-100 mt-auto text-dark">Edit</a>
-                </div>
-            </div>
-
-            <!-- Option 4: Delete Ticket -->
-            <div class="col-md-2 col-sm-6">
-                <div class="card shadow border-0 p-3 text-center h-100">
-                    <h5 class="fw-bold">Cancel Ticket</h5>
-                    <p class="text-muted small">Remove a booking</p>
-                    <!-- THE FIX: Route them to the list so they can pick a passenger -->
-                    <a href="{% url 'view_bookings' %}" class="btn btn-danger w-100 mt-auto">Delete</a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<!-- BACKEND: {{ user.username }} renders the logged-in employee's username -->
+<h2>Welcome, {{ user.username }}</h2>
+<div class="list-group">
+    <!-- BACKEND: Links pass status query parameters to open pre-filtered views of the manifest -->
+    <a href="{% url 'view_bookings' %}?status=active" class="list-group-item list-group-item-action">View All Bookings</a>
+    <a href="{% url 'view_bookings' %}?status=pending_payment" class="list-group-item list-group-item-action">Pending Payments</a>
+    <a href="{% url 'view_bookings' %}?status=refund_requested" class="list-group-item list-group-item-action">Pending Refunds</a>
+    <a href="{% url 'search_route' %}" class="list-group-item list-group-item-action">Book a Ticket (Walk-in Counter)</a>
+    <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger">Logout</a>
+</div>
+{% endblock %}

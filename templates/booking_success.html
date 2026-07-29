@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h2>Booking Confirmed!</h2>
+        <p><strong>PNR Reference:</strong> {{ ticket.pnr_number }}</p>
+        <p><strong>Passenger Name:</strong> {{ ticket.passenger_name }}</p>
+        <p><strong>Seat Number:</strong> {{ ticket.seat_number }}</p>
+        <p><strong>Travel Route:</strong> {{ ticket.origin }} to {{ ticket.destination }}</p>
+        <p><strong>Fare Amount:</strong> Rs. {{ ticket.fare_paid }}</p>
+        <p><strong>Reservation Status:</strong> {{ ticket.get_ticket_status_display }}</p>
+        <p><strong>Payment Status:</strong> {{ ticket.get_payment_status_display }}</p>
+
+        <!-- BACKEND FIX: Correctly displays NayaPay/JazzCash info on the final e-ticket receipt! -->
+        {% if ticket.payment_status == 'PENDING_ONLINE' %}
+            <div class="alert alert-info mt-4 border">
+                <h5>Online Payment Instructions</h5>
+                <p>Please transfer <strong>Rs. {{ ticket.fare_paid }}</strong> using the credentials below:</p>
+                
+                {% if payment_config %}
+                    <ul class="mb-2">
+                        <li><strong>Available Services:</strong> {{ payment_config.payment_option_1|default:"Bank Transfer" }}{% if payment_config.payment_option_2 %} / {{ payment_config.payment_option_2 }}{% endif %}</li>
+                        <li><strong>Account Title:</strong> {{ payment_config.account_title }}</li>
+                        <li><strong>Account Number:</strong> {{ payment_config.account_number }}</li>
+                    </ul>
+                    
+                    {% if payment_config.instructions %}
+                        <p class="small text-muted mb-0 mt-2">{{ payment_config.instructions }}</p>
+                    {% else %}
+                        <p class="small text-muted mb-0 mt-2">After transferring, our accounting desk will match your deposit against your sender name and confirm your seat.</p>
+                    {% endif %}
+                {% else %}
+                    <p class="text-danger">Payment configuration not set by administrator.</p>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <div class="mt-4">
+            <a href="{% url 'home' %}" class="btn btn-primary">Return to Homepage</a>
+            <a href="{% url 'track_booking' %}" class="btn btn-outline-secondary">Track This Reservation</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

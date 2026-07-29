@@ -1,46 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bus Reservation System</title>
-    <!-- Bootstrap CSS for styling -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light d-flex align-items-center vh-100">
+{% extends 'base.html' %}
+{% block content %}
+<h1>Welcome to Bus Reservation System</h1>
+<p>Find and book your bus tickets easily.</p>
 
-    <div class="container text-center">
-        <h1 class="display-4 fw-bold mb-3">Bus Reservation System</h1>
-        <p class="text-muted mb-5 fs-5">Please select your portal to continue.</p>
-
-        <div class="row justify-content-center gap-4">
-            
-            <!-- ADMIN CARD -->
-            <div class="col-md-4">
-                <div class="card shadow border-0 py-4">
-                    <div class="card-body">
-                        <h3 class="card-title fw-bold">Admin Portal</h3>
-                        <p class="card-text text-muted mb-4">Manage Buses, Routes, and Fares.</p>
-                        <!-- This links safely to the built-in Admin Panel -->
-                        <a href="/admin/" class="btn btn-dark w-100 py-2">Go to Admin</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- EMPLOYEE CARD -->
-            <div class="col-md-4">
-                <div class="card shadow border-0 py-4">
-                    <div class="card-body">
-                        <h3 class="card-title fw-bold">Employee Portal</h3>
-                        <p class="card-text text-muted mb-4">Book Tickets and Manage Passengers.</p>
-                        <!-- CHANGED THIS TO # SO IT STOPS CRASHING -->
-                        <a href="/login/" class="btn btn-primary w-100 py-2">Go to Login</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-</body>
-</html>
+<h2 class="mt-4">Upcoming Trips</h2>
+<table class="table table-striped">
+    <thead><tr><th>Route</th><th>Date</th><th>Time</th><th>Bus</th><th>Action</th></tr></thead>
+    <tbody>
+        {% for trip in upcoming_trips %}
+        <tr>
+            <td>{{ trip.route_name }}</td>
+            <td>{{ trip.date }}</td>
+            <!-- BACKEND FIX: "h:i A" converts military time to 12-hour AM/PM format (e.g., 06:00 PM) -->
+            <td>{{ trip.departure_time|time:"h:i A" }}</td>
+            <!-- BACKEND FIX: Changed from bus_number to bus_name so the bus name displays properly! -->
+            <td>{{ trip.bus.bus_name }}</td>
+            <td>
+                <a href="{% url 'book_ticket_step_1' trip.id %}" class="btn btn-sm btn-primary">Book Seat</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No upcoming trips scheduled.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

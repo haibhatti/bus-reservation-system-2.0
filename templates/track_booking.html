@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Track Booking</h2>
+<!-- BACKEND: Submits BOTH PNR and CNIC to track_booking in views.py for secure verification -->
+<form method="post" class="row g-3">
+    {% csrf_token %}
+    <div class="col-md-6">
+        <label class="form-label">PNR Number</label>
+        <!-- BACKEND: name="pnr_number" is read by request.POST.get('pnr_number') -->
+        <input type="text" name="pnr_number" class="form-control text-uppercase" placeholder="e.g., A1B2C3D4" maxlength="8" required>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">CNIC Number</label>
+        <!-- BACKEND: name="passenger_cnic" is read by request.POST.get('passenger_cnic') -->
+        <input type="text" name="passenger_cnic" class="form-control" placeholder="35202-1234567-1" required>
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Track Status</button>
+    </div>
+</form>
+
+<!-- BACKEND: Only renders if views.py found a Ticket matching BOTH the PNR and CNIC -->
+{% if ticket %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4>Booking Details</h4>
+            <p><strong>PNR:</strong> {{ ticket.pnr_number }}</p>
+            <p><strong>Name:</strong> {{ ticket.passenger_name }}</p>
+            <p><strong>Seat:</strong> {{ ticket.seat_number }}</p>
+            <p><strong>Route:</strong> {{ ticket.origin }} to {{ ticket.destination }}</p>
+            <p><strong>Status:</strong> {{ ticket.get_ticket_status_display }}</p>
+            <p><strong>Payment:</strong> {{ ticket.get_payment_status_display }}</p>
+            
+            <!-- BACKEND: Only allow self-cancellation if ticket is currently active -->
+            {% if ticket.ticket_status == 'RESERVED' or ticket.ticket_status == 'CONFIRMED' %}
+                <!-- BACKEND: Submits cancellation request to cancel_booking_passenger in views.py -->
+                <form method="post" action="{% url 'cancel_booking_passenger' ticket.pnr_number %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this reservation?');">Cancel Booking</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
