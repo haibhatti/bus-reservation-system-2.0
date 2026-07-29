@@ -10,7 +10,6 @@ class Bus(models.Model):
     bus_name = models.CharField(max_length=250, unique=True)
     total_seats = models.IntegerField(default=40)
     
-    # QA FIX: Soft-delete flag so admins can deactivate old buses without deleting accounting history
     is_active = models.BooleanField(default=True, help_text="Set to False to retire a bus without deleting historical tickets.")
 
     def __str__(self):
@@ -23,7 +22,6 @@ class Trip(models.Model):
         CANCELLED = 'CANCELLED', 'Cancelled'
         COMPLETED = 'COMPLETED', 'Completed'
 
-    # QA FIX: Changed from CASCADE to PROTECT. You cannot delete a Bus if it has historical trips!
     bus = models.ForeignKey(Bus, on_delete=models.PROTECT, related_name='trips')
     route_name = models.CharField(max_length=255)
     date = models.DateField()
@@ -63,10 +61,6 @@ class Ticket(models.Model):
         CANCELLED_BY_COMPANY = 'CANCELLED_COMPANY', 'Cancelled by Bus Company'
         CANCELLED = 'CANCELLED', 'Cancelled (No Payment Owed)'
 
-    # =========================================================================
-    # QA FIX: CHANGED TO models.PROTECT ON ALL OPERATIONAL TICKETS
-    # Protects accounting ledgers. An admin CANNOT erase a Trip or City if tickets exist!
-    # =========================================================================
     trip = models.ForeignKey(Trip, on_delete=models.PROTECT, related_name='tickets')
     origin = models.ForeignKey(Location, on_delete=models.PROTECT, related_name='ticket_origins')
     destination = models.ForeignKey(Location, on_delete=models.PROTECT, related_name='ticket_destinations')
