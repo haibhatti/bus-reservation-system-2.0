@@ -31,9 +31,9 @@
             <p><strong>Status:</strong> {{ ticket.get_ticket_status_display }}</p>
             <p><strong>Payment:</strong> {{ ticket.get_payment_status_display }}</p>
             
-            <!-- BACKEND: Only allow self-cancellation if ticket is currently active -->
+            
             {% if ticket.ticket_status == 'RESERVED' or ticket.ticket_status == 'CONFIRMED' %}
-                <!-- BACKEND: Submits cancellation request to cancel_booking_passenger in views.py -->
+                
                 <form method="post" action="{% url 'cancel_booking_passenger' ticket.pnr_number %}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this reservation?');">Cancel Booking</button>

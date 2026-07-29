@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Employee Login</h2>
-<!-- BACKEND: Submits username/password to user_login in views.py -->
+
 <form method="post">
     {% csrf_token %}
-    <!-- BACKEND: Renders standard login inputs from AuthenticationForm -->
+    
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Login</button>
 </form>

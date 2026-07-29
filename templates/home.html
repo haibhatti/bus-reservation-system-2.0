@@ -11,9 +11,9 @@
         <tr>
             <td>{{ trip.route_name }}</td>
             <td>{{ trip.date }}</td>
-            <!-- BACKEND FIX: "h:i A" converts military time to 12-hour AM/PM format (e.g., 06:00 PM) -->
+            
             <td>{{ trip.departure_time|time:"h:i A" }}</td>
-            <!-- BACKEND FIX: Changed from bus_number to bus_name so the bus name displays properly! -->
+        
             <td>{{ trip.bus.bus_name }}</td>
             <td>
                 <a href="{% url 'book_ticket_step_1' trip.id %}" class="btn btn-sm btn-primary">Book Seat</a>

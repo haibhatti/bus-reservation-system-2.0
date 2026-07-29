@@ -58,7 +58,6 @@
                     {% csrf_token %}
                     <input type="hidden" name="ticket_id" value="{{ t.id }}">
                     
-                    <!-- BACKEND FIX: Cash/Online confirmation buttons ONLY appear on non-cancelled tickets -->
                     {% if 'CANCELLED' not in t.ticket_status %}
                         {% if t.payment_status == 'PENDING_TERMINAL' %}
                             <button type="submit" name="action" value="mark_paid" class="btn btn-sm btn-success mb-1">Mark Paid</button>
@@ -68,13 +67,13 @@
                         {% endif %}
                     {% endif %}
                     
-                    <!-- BACKEND FIX: Approve Refund button ALWAYS appears when a refund is requested! -->
+                    
                     {% if t.payment_status == 'REFUND_REQUESTED' %}
                         <button type="submit" name="action" value="process_refund" class="btn btn-sm btn-dark mb-1">Approve Refund</button>
                     {% endif %}
                 </form>
                 
-                <!-- BACKEND FIX: Edit and Cancel buttons only appear on active tickets -->
+                
                 {% if 'CANCELLED' not in t.ticket_status %}
                     <div class="btn-group btn-group-sm mt-1" role="group">
                         <a href="{% url 'edit_ticket' t.id %}" class="btn btn-outline-primary">Edit</a>

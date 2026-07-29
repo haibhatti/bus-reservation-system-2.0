@@ -9,7 +9,7 @@
     <button type="submit" class="btn btn-primary">Search Buses</button>
 </form>
 
-<!-- BACKEND: If search_route found matching trips, render the results list below -->
+
 {% if trips is not None %}
     {% if trips %}
         <h4 class="mt-4">Available Trips</h4>
@@ -17,7 +17,7 @@
             {% for trip in trips %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 {{ trip.route_name }} - {{ trip.date }} at {{ trip.departure_time|time:"H:i" }}
-                <!-- BACKEND: Takes user to seat layout for this trip ID -->
+            
                 <a href="{% url 'book_ticket_step_1' trip.id %}" class="btn btn-sm btn-success">Select Seats</a>
             </li>
             {% endfor %}

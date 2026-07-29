@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Verify OTP</h2>
-<!-- BACKEND: {{ email }} displays the email address stored inside session['temp_booking'] -->
+
 <p>We sent a 6-digit verification code to <strong>{{ email }}</strong></p>
 
-<!-- BACKEND: Submits entered OTP to verify_otp_step_2 in views.py -->
+
 <form method="post">
     {% csrf_token %}
     <div class="mb-3">
         <label>OTP Code</label>
-        <!-- BACKEND: name="otp_code" is matched against session['temp_booking']['otp'] -->
+        
         <input type="text" name="otp_code" class="form-control" placeholder="000000" maxlength="6" required autofocus>
     </div>
     <button type="submit" class="btn btn-primary">Verify & Confirm Booking</button>

@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Edit Ticket: {{ ticket.pnr_number }}</h2>
-<!-- BACKEND: Submits updated form data to edit_ticket in views.py -->
+
 <form method="post">
     {% csrf_token %}
-    <!-- BACKEND: {{ form.as_p }} automatically renders input boxes for passenger_name and seat_number -->
+
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Save Changes</button>
     <a href="{% url 'view_bookings' %}" class="btn btn-secondary">Cancel</a>

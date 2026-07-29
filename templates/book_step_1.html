@@ -6,7 +6,7 @@
 <form method="post" id="bookingForm">
     {% csrf_token %}
     <div class="row">
-        <!-- LEFT COLUMN: PASSENGER & PAYMENT DETAILS -->
+        
         <div class="col-md-6">
             <div class="mb-3">
                 <label class="form-label">Full Name</label>
@@ -22,7 +22,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Phone Number</label>
-                <!-- BACKEND FIX: Enforces 11-digit Pakistani mobile number format -->
+                
                 <input type="text" name="passenger_phone" class="form-control" pattern="^03\d{9}$" title="Enter an 11-digit Pakistani mobile number starting with 03 (e.g., 03001234567)" placeholder="03001234567" required>
             </div>
             <div class="mb-3">
@@ -37,7 +37,6 @@
                 <input type="text" name="sender_account_name" class="form-control" placeholder="e.g., Faris Khan (Optional for cash)">
             </div>
             
-            <!-- BACKEND FIX: Correctly maps NayaPay, JazzCash, Account Title, and Number from Admin! -->
             <div class="alert alert-info p-3 small mb-4 border">
                 <strong class="d-block mb-1">Online Banking / Transfer Details:</strong>
                 {% if payment_config %}
@@ -56,7 +55,6 @@
             </div>
         </div>
 
-        <!-- RIGHT COLUMN: INTERACTIVE SEAT GRID -->
         <div class="col-md-6 ps-md-4">
             <h5>Select Seat Number</h5>
             <div class="seat-grid" style="display: flex; flex-wrap: wrap; max-width: 300px;">
@@ -82,7 +80,7 @@
 </form>
 
 <script>
-    // Highlight clickable seats
+
     document.querySelectorAll('.seat-available').forEach(function(el) {
         el.addEventListener('click', function() {
             document.querySelectorAll('.seat').forEach(function(s) { s.classList.remove('seat-selected'); });
@@ -91,7 +89,6 @@
         });
     });
 
-    // Immediately alert user if they click Proceed without selecting a seat
     document.getElementById('bookingForm').addEventListener('submit', function(e) {
         if (!document.querySelector('input[name="seat_number"]:checked')) {
             e.preventDefault();

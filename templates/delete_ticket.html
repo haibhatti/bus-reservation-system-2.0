@@ -3,10 +3,8 @@
 <div class="card">
     <div class="card-body">
         <h2>Confirm Cancellation</h2>
-        <!-- BACKEND: Displays the passenger name and PNR from the fetched Ticket instance -->
         <p>Are you sure you want to cancel ticket for <strong>{{ ticket.passenger_name }}</strong> (PNR: {{ ticket.pnr_number }})?</p>
         
-        <!-- BACKEND: Submitting this form triggers the POST branch in delete_ticket (views.py) -->
         <form method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Yes, Cancel Ticket</button>

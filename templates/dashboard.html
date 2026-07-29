@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- BACKEND: {{ user.username }} renders the logged-in employee's username -->
 <h2>Welcome, {{ user.username }}</h2>
 <div class="list-group">
-    <!-- BACKEND: Links pass status query parameters to open pre-filtered views of the manifest -->
+   
     <a href="{% url 'view_bookings' %}?status=active" class="list-group-item list-group-item-action">View All Bookings</a>
     <a href="{% url 'view_bookings' %}?status=pending_payment" class="list-group-item list-group-item-action">Pending Payments</a>
     <a href="{% url 'view_bookings' %}?status=refund_requested" class="list-group-item list-group-item-action">Pending Refunds</a>
