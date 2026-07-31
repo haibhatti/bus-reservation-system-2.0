@@ -7,14 +7,22 @@
     <button type="submit" class="btn btn-primary">Search Buses</button>
 </form>
 
-{% if trips is not None %}
-    {% if trips %}
+{% if fares is not None %}
+    {% if fares %}
         <h4 class="mt-4">Available Trips</h4>
         <ul class="list-group">
-            {% for trip in trips %}
+            {% for fare in fares %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ trip.route_name }} - {{ trip.date }} at {{ trip.departure_time|time:"H:i" }}
-                <a href="{% url 'book_ticket_step_1' trip.id %}" class="btn btn-sm btn-success">Select Seats</a>
+                <div>
+                    <strong>{{ fare.trip.route_name }}</strong> - {{ fare.trip.date }}<br>
+                    <small class="text-muted">
+                        Departure: {{ fare.segment_departure_time|time:"g:i A"|default:"Main Trip Time" }} | 
+                        Arrival: {{ fare.segment_arrival_time|time:"g:i A"|default:"Main Trip Time" }} | 
+                        Fare: Rs. {{ fare.price }}
+                    </small>
+                </div>
+                <!-- Notice we use fare.trip.id here so it links to the correct bus -->
+                <a href="{% url 'book_ticket_step_1' fare.trip.id %}" class="btn btn-sm btn-success">Select Seats</a>
             </li>
             {% endfor %}
         </ul>

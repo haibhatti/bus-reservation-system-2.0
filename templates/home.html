@@ -5,13 +5,22 @@
 
 <h2 class="mt-4">Upcoming Trips</h2>
 <table class="table table-striped">
-    <thead><tr><th>Route</th><th>Date</th><th>Time</th><th>Bus</th><th>Action</th></tr></thead>
+    <thead>
+        <tr>
+            <th>Route</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Bus</th>
+            <th>Action</th>
+        </tr>
+    </thead>
     <tbody>
         {% for trip in upcoming_trips %}
         <tr>
             <td>{{ trip.route_name }}</td>
             <td>{{ trip.date }}</td>
-            <td>{{ trip.departure_time|time:"h:i A" }}</td>
+            <!-- Updated the time filter right here to "g:i A" -->
+            <td>{{ trip.departure_time|time:"g:i A" }}</td>
             <td>{{ trip.bus.bus_name }}</td>
             <td>
                 <a href="{% url 'book_ticket_step_1' trip.id %}" class="btn btn-sm btn-primary">Book Seat</a>

@@ -18,17 +18,27 @@ def generate_otp():
 
 # send e-ticket when paid
 def send_booking_confirmation(ticket):
+    # QA FIX: Safely grab the specific segment time for this passenger's ticket, 
+    # fallback to the main trip departure if a segment time wasn't set by the admin.
+    try:
+        fare_rule = FareCalculation.objects.get(trip=ticket.trip, origin=ticket.origin, destination=ticket.destination)
+        if fare_rule.segment_departure_time:
+            display_time = fare_rule.segment_departure_time.strftime('%I:%M %p')
+        else:
+            display_time = ticket.trip.departure_time.strftime('%I:%M %p')
+    except FareCalculation.DoesNotExist:
+        display_time = ticket.trip.departure_time.strftime('%I:%M %p')
+
     subject = f"Booking Confirmed - PNR: {ticket.pnr_number}"
     message = (
         f"Dear {ticket.passenger_name},\n\n"
         f"Your ticket from {ticket.origin} to {ticket.destination} "
-        f"on {ticket.trip.date} at {ticket.trip.departure_time.strftime('%H:%M')} is confirmed.\n"
+        f"on {ticket.trip.date} at {display_time} is confirmed.\n"
         f"Seat Number: {ticket.seat_number}\n"
         f"Fare Amount: Rs. {ticket.fare_paid}\n\n"
         f"Thank you for choosing Bus Reservation System."
     )
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [ticket.passenger_email], fail_silently=False)
-
 # handle all cancellation and refund emails smartly
 def send_smart_cancellation_email(ticket, reason_text, refund_type=None):
     subject = f"Reservation Update - PNR: {ticket.pnr_number}"
@@ -84,7 +94,7 @@ def home(request):
 # route search and matching logic
 def search_route(request):
     form = RouteSearchForm()
-    trips = None 
+    fares = None 
 
     if request.method == 'POST':
         form = RouteSearchForm(request.POST)
@@ -96,11 +106,14 @@ def search_route(request):
             request.session['search_origin_id'] = origin.id
             request.session['search_destination_id'] = destination.id
 
-            fare_rules = FareCalculation.objects.filter(origin=origin, destination=destination)
-            trip_ids = fare_rules.values_list('trip_id', flat=True).distinct()
-            trips = Trip.objects.filter(id__in=trip_ids, status=Trip.TripStatus.SCHEDULED)
+            # Query FareCalculation to get the exact segment times
+            fares = FareCalculation.objects.filter(
+                origin=origin, 
+                destination=destination,
+                trip__status=Trip.TripStatus.SCHEDULED
+            ).select_related('trip')
             
-            return render(request, 'search_route.html', {'form': form, 'trips': trips})
+            return render(request, 'search_route.html', {'form': form, 'fares': fares})
 
     return render(request, 'search_route.html', {'form': form})
 

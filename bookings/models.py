@@ -26,23 +26,29 @@ class Trip(models.Model):
     route_name = models.CharField(max_length=255)
     date = models.DateField()
     departure_time = models.TimeField()
+    arrival_time = models.TimeField(null=True, blank=True) # Overall Trip Arrival
     status = models.CharField(max_length=20, choices=TripStatus.choices, default=TripStatus.SCHEDULED)
 
     def __str__(self):
-        return f"{self.route_name} | {self.date} at {self.departure_time.strftime('%H:%M')}"
+        # Enforces 12-hour format in the Django Admin panel
+        return f"{self.route_name} | {self.date} at {self.departure_time.strftime('%I:%M %p')}"
 
 class FareCalculation(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='fares')
     origin = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='fare_origins')
     destination = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='fare_destinations')
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    # Segment-specific times for intermediate stops
+    segment_departure_time = models.TimeField(null=True, blank=True, help_text="Time bus leaves this specific origin") 
+    segment_arrival_time = models.TimeField(null=True, blank=True, help_text="Time bus arrives at this specific destination")
 
     class Meta:
         unique_together = ('trip', 'origin', 'destination')
 
     def __str__(self):
         return f"{self.origin} → {self.destination}: Rs. {self.price}"
-
+    
 class Ticket(models.Model):
     class PaymentStatus(models.TextChoices):
         PENDING_TERMINAL = 'PENDING_TERMINAL', 'Pending Terminal Cash Payment'
