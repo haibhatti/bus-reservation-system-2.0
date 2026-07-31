@@ -18,8 +18,7 @@ def generate_otp():
 
 # send e-ticket when paid
 def send_booking_confirmation(ticket):
-    # QA FIX: Safely grab the specific segment time for this passenger's ticket, 
-    # fallback to the main trip departure if a segment time wasn't set by the admin.
+    
     try:
         fare_rule = FareCalculation.objects.get(trip=ticket.trip, origin=ticket.origin, destination=ticket.destination)
         if fare_rule.segment_departure_time:
